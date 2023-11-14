@@ -1,0 +1,22 @@
+- hosts: testservers
+  tasks:
+    - name: add users
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        state: present
+      loop: "{{ users }}"
+      become: yes
+    - name: create git conf
+      ansible.builtin.template:
+        src: ./files/.gitconfig.j2
+        dest: "/home/{{ item.name }}/.gitconfig"
+        owner: "{{ item.name }}"
+      loop: "{{ users }}"
+      become: yes
+  vars:
+    users:
+      - { name: sansa, email: sansa@test.com }
+      - { name: jaime, email: jaime@test.com }
+      - { name: tirion, email: tirion@test.com }
+
+

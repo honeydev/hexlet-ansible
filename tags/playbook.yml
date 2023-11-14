@@ -1,0 +1,36 @@
+- hosts: testservers
+
+  tasks:
+    - name: apt upate
+      ansible.builtin.apt:
+        update_cache: yes
+        name: nginx
+        state: latest
+      tags: ["packages"]
+      become: yes
+
+    - name: git install
+      ansible.builtin.apt:
+        update_cache: yes
+        name: git
+        state: latest
+      tags: ["packages"]
+      become: yes
+
+    - name: git install
+      ansible.builtin.apt:
+        update_cache: yes
+        name: make
+        state: latest
+      tags: ["packages"]
+      become: yes
+
+    - name: add aria
+      ansible.builtin.user:
+        name: aria
+        comment: aria stark
+        uid: 1040
+        group: "admin"
+        state: "present"
+      tags: ["users"]
+
