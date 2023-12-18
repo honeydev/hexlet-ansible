@@ -1,0 +1,34 @@
+- hosts: testservers
+  gather_facts: no
+
+  tasks:
+   - name: install pkgs
+     ansible.builtin.apt:
+       state: latest
+       pkg:
+         - nginx
+         - cowsay
+     become: yes
+   - name: cowsay
+     shell: cowsay "Hello server"
+     register: cow_say
+   - name: update nginix config
+     ansible.builtin.template:
+       src: files/index.template.j2
+       dest: "/var/tmp/www/index.html"
+     become: yes
+   - name: update index.html
+     ansible.builtin.copy:
+       src: files/nginx.conf
+       dest: "/etc/nginx/nginx.conf"
+     become: yes
+     notify:
+       - restart nginx
+
+  handlers:
+   - name: restart nginx
+     ansible.builtin.service:
+       name: nginx
+       state: restarted
+     become: yes
+
