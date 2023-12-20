@@ -1,0 +1,16 @@
+- hosts: testservers
+  gather_facts: yes
+
+  roles:
+    - role: "geerlingguy.git"
+      become: yes
+      vars:
+        git_packages:
+          - git
+        git_version: "2.26.0"
+    - role: nginx
+      become: yes
+
+  tasks:
+    - name: test task
+      shell: exit
